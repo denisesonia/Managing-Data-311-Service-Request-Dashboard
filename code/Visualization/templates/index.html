@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/flatly/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto&display=swap">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <style>
+      body {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14px;
+      }
+      .navbar {
+        background-color: #fff;
+        border: none;
+      }
+      .navbar-brand, .navbar-nav li a {
+        color: #333;
+        font-weight: bold;
+      }
+      .nav-link:hover, .nav-link:focus {
+        color: #7fad39;
+      }
+      .sidebar {
+        background-color: #f8f9fa;
+        border-right: 1px solid #cccccc;
+        padding: 20px;
+        min-height: 100vh;
+        position: fixed;
+      }
+      .sidebar-title {
+        font-size: 28px;
+        font-weight: bold;
+        color: #333;
+        margin-bottom: 20px;
+      }
+      .form-group {
+        margin-bottom: 20px;
+      }
+      .form-control {
+        font-size: 14px;
+        height: 36px;
+        padding: 6px 12px;
+        border-radius: 5px;
+        border: 1px solid #cccccc;
+        box-shadow: none;
+      }
+      #plot {
+        height: 600px;
+        margin-bottom: 0px;
+      }
+      #plot2 {
+        height: 600px;
+	margin-top: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-3 sidebar">
+          <div class="sidebar-title">311 Service Requests</div>
+          <form method="POST" action="/">
+            <div class="form-group">
+              <label for="zip_code">Zip Code:</label>
+              <input type="text" class="form-control" id="zip_code" name="zip_code" required>
+            </div>
+            <div class="form-group">
+              <label for="created_date">Requests created in the last 30 days from:</label>
+              <input type="date" class="form-control" id="created_date" name="created_date" required>
+            </div>
+            <div class="form-group">
+              <label for="agency">Agency:</label>
+              <select class="form-control" id="agency" name="agency">
+                <option value="">--</option>
+                {% for option in options_agency %}
+                {% if option.value is not none %}
+                <option value="{{ option.value }}">{{ option.label }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="complaint_type">Complaint Type:</label>
+              <select class="form-control" id="complaint_type" name="complaint_type">
+                <option value="">--</option>
+                {% for option in options_complaint %}
+                {% if option.value is not none %}
+                <option value="{{ option.value }}">{{ option.label }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+            <input type="submit" class="btn btn-primary" value="Submit">
+          </form>
+        </div>
+        <div class="col-md-9 col-md-offset-3">
+          <div class="row">
+            <div class="col-md-12">
+              {% if graph %}
+              <div id="plot">{{ graph|safe }}</div>
+              {% endif %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-12">
+              {% if graph2 %}
+              <div id="plot2">{{ graph2|safe }}</div>
+              {% endif %}
+            </div>
+          </div>
+          {% if not graph and not graph2 %}
+          <div class="row">
+            <div class="col-md-12">
+              <p>No results to display.</p>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
